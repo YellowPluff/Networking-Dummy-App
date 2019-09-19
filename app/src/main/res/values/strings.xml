@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">Networking Example</string>
+
+    <string-array name="widener_major_list">
+        <item>Computer Science</item>
+        <item>Information Technology</item>
+        <item>Electrical Engineering</item>
+    </string-array>
+
+    <string name="choose_major">Choose Your Major</string>
+
+</resources>
