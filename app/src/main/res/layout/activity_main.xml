@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="First Name" />
+        android:hint="First Name" />
 
     <View
         android:id="@+id/divider2"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Last Name" />
+        android:hint="Last Name" />
 
     <View
         android:id="@+id/divider4"
