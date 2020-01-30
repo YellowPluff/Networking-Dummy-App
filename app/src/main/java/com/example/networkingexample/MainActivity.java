@@ -42,14 +42,10 @@ public class MainActivity extends AppCompatActivity {
     //User class is not created yet
 //    List<User> users;
 
-    DatabaseReference databaseUsers;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        databaseUsers = FirebaseDatabase.getInstance().getReference("users");
 
         nameInputField = findViewById(R.id.nameField);
         idInputField = findViewById(R.id.idField);
@@ -111,12 +107,14 @@ public class MainActivity extends AppCompatActivity {
     private int addUser(String name, String studentId, String major) {
         //getting a unique id using push().getKey() method
         //it will create a unique id and we will use it as the Primary Key for our User
+        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference("/Users_list");
         String id = databaseUsers.push().getKey();
 
         //creating an User Object
         User user = new User(name, studentId, major);
 
         databaseUsers.child(id).setValue(user);
+//        databaseUsers.setValue(user2);
         return 0;
     }
 
@@ -126,13 +124,13 @@ public class MainActivity extends AppCompatActivity {
     private int deleteUser(String id) {
         //getting the specified User reference
         //TODO I'm not sure what "users" references
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("users").child(id);
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference().child(id);
 
         //removing User
         dR.removeValue();
 
         //getting the tracks reference for the specified User
-        DatabaseReference drTracks = FirebaseDatabase.getInstance().getReference("tracks").child(id);
+        DatabaseReference drTracks = FirebaseDatabase.getInstance().getReference().child(id);
 
         //removing all tracks
         drTracks.removeValue();
