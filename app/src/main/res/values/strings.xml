@@ -2,12 +2,100 @@
 
     <string name="app_name">Networking Example</string>
 
-    <string-array name="widener_major_list">
+    <string-array name="widener_study_fields">
+        <item>Select...</item>
+        <item>Accounting</item>
+        <item>Accounting Information Systems</item>
+        <item>Adult-Gerontology CNS</item>
+        <item>Affirmative Therapy</item>
+        <item>Allied Health Education</item>
+        <item>Anthropology</item>
+        <item>Biochemistry</item>
+        <item>Biology</item>
+        <item>Biomedical Engineering</item>
+        <item>Business Analytics</item>
+        <item>Business Process Innovation</item>
+        <item>Chemical Engineering</item>
+        <item>Chemistry</item>
+        <item>Civil Engineering</item>
+        <item>Cognitive Studies in Reading</item>
+        <item>Communication Studies</item>
         <item>Computer Science</item>
-        <item>Information Technology</item>
+        <item>Computer Information Systems</item>
+        <item>Counselor Education</item>
+        <item>Creative Writing</item>
+        <item>Criminal Justice</item>
+        <item>Digital Media Informatics</item>
+        <item>Diversity in the Workplace</item>
+        <item>Economics</item>
+        <item>Education Certificates &amp; Certifications</item>
         <item>Electrical Engineering</item>
+        <item>Elementary Education</item>
+        <item>Elementary Education &amp; Special Education Certification</item>
+        <item>Engineering Management</item>
+        <item>English</item>
+        <item>Enterprise Resource Management</item>
+        <item>Environmental Science &amp; Sustainability</item>
+        <item>Executive Nurse Leadership</item>
+        <item>Family Nurse Practitioner</item>
+        <item>Finance</item>
+        <item>French</item>
+        <item>Gender, Women &amp; Sexuality Studies</item>
+        <item>Health Care Management</item>
+        <item>Higher Education Leadership</item>
+        <item>History</item>
+        <item>Home School Visitor</item>
+        <item>Human Sexuality</item>
+        <item>Human Sexuality/Counselor Education</item>
+        <item>Human Sexuality/Public Administration</item>
+        <item>Human Sexuality/Social Work</item>
+        <item>Instructional Technology</item>
+        <item>International Business</item>
+        <item>International Relations</item>
+        <item>K-12 Educational Leadership</item>
+        <item>Management</item>
+        <item>Marketing</item>
+        <item>Mathematics</item>
+        <item>MBA</item>
+        <item>MBA is Health Care Management</item>
+        <item>Mechanical Engineering</item>
+        <item>MSE/MBA</item>
+        <item>Nonprofit Leadership</item>
+        <item>Nursing</item>
+        <item>Nursing - Accelerated</item>
+        <item>Nursing Education</item>
+        <item>Nursing Post-Graduate Certificates</item>
+        <item>Nursing Practice</item>
+        <item>Nursing Science</item>
+        <item>Occupational Therapy</item>
+        <item>Organizational Development &amp; Leadership</item>
+        <item>Organizational Leadership</item>
+        <item>Physical Therapy</item>
+        <item>Physics</item>
+        <item>Political Science</item>
+        <item>Pre-Law</item>
+        <item>Pre-Med/Health Care Professions</item>
+        <item>Psychology</item>
+        <item>PsyD</item>
+        <item>PsyD/Human Sexuality</item>
+        <item>PsyD/MBA</item>
+        <item>PsyD/MBA-Health Care Management</item>
+        <item>PsyD/MCJ</item>
+        <item>Public Administration</item>
+        <item>Reading Education</item>
+        <item>RN to BSN</item>
+        <item>Robotics Engineering</item>
+        <item>SAS Business Intelligence &amp; Analytics</item>
+        <item>Secondary Education</item>
+        <item>Sex Therapy</item>
+        <item>Social Work</item>
+        <item>Sociology</item>
+        <item>Spanish</item>
+        <item>Special Education</item>
+        <item>Taxation &amp; Financial Planning</item>
+        <item>Trauma Post-Graduate Certificate</item>
+        <item>Urban Studies</item>
+        <item>Visual &amp; Performing Arts</item>
     </string-array>
-
-    <string name="choose_major">Choose Your Major</string>
 
 </resources>

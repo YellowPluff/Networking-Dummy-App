@@ -1,5 +1,6 @@
 package com.example.networkingexample;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -11,11 +12,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,199 +32,100 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-//    public static final String first_name = "networkingapp.firstname";
-//    public static final String last_name = "networkingapp.lastname";
-//    public static final String major = "networkingapp.major";
+    private DatabaseReference databaseRef;
 
+    private EditText emailInputField;
+    private EditText passwordInputField;
     private EditText nameInputField;
-    private EditText idInputField;
     private Spinner majorSpinner;
+
     private Button addButton;
     private Button removeButton;
+    private Button retrieveUsersButton;
     private TextView textView;
 
-    //User class is not created yet
-//    List<User> users;
+    private LinearLayout userDisplayLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        nameInputField = findViewById(R.id.nameField);
-        idInputField = findViewById(R.id.idField);
-        majorSpinner = findViewById(R.id.majorSpinner);
+        databaseRef = FirebaseDatabase.getInstance().getReference("/users/");
+
+        emailInputField = findViewById(R.id.email_input_field);
+        passwordInputField = findViewById(R.id.password_input_field);
+        nameInputField = findViewById(R.id.name_input_field);
+        majorSpinner = findViewById(R.id.field_select_spinner);
         addButton = findViewById(R.id.addButton);
         removeButton = findViewById(R.id.deleteButton);
+        retrieveUsersButton = findViewById(R.id.retrieveUsers);
         textView = findViewById(R.id.textView);
-
-//        users = new ArrayList<>();
+        userDisplayLayout = findViewById(R.id.user_display_layout);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
+                String email = emailInputField.getText().toString().trim();
+                String password = passwordInputField.getText().toString().trim();
                 String name = nameInputField.getText().toString().trim();
-                String studentId = idInputField.getText().toString().trim();
                 String major = majorSpinner.getSelectedItem().toString();
-                if(!name.isEmpty() && !studentId.isEmpty())
+                if(!email.isEmpty() && !password.isEmpty() && !name.isEmpty() && !majorSpinner.getSelectedItem().toString().equals("Select..."))
                 {
-                    textView.setText("Hello, " + name + " (" + studentId + "). Major: " + major);
-                    int returnCode = addUser(name, studentId, major); //TODO
-                    if(returnCode == 0)
-                    {
-                        //Resetting input fields
-                        nameInputField.setText("");
-                        idInputField.setText("");
-
-                        //displaying a success toast
-                        textView.setText("User added successfully");
-                    }
+                    addUser(email, password, name, major);
                 }
                 }
             });
 
-        removeButton.setOnClickListener(new View.OnClickListener() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                String studentId = idInputField.getText().toString().trim();
-                if(!studentId.isEmpty())
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userDisplayLayout.removeAllViews();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren())
                 {
-                    int returnCode = deleteUser(studentId);
-                    if(returnCode == 0)
-                    {
-                        //Resetting input fields
-                        nameInputField.setText("");
-                        idInputField.setText("");
-
-                        //displaying a success toast
-                        textView.setText("User Deleted successfully");
-                    }
+                    User post = postSnapshot.getValue(User.class);
+                    TextView userDataView = new TextView(userDisplayLayout.getContext());
+                    userDataView.setText(post.email + " || " + post.password + " || " + post.name + " || " + post.major);
+                    userDisplayLayout.addView(userDataView);
                 }
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(userDisplayLayout.getContext(), "The read failed: " + databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            }
         });
-        }
+
+    }
 
     /*
      * This method is saving a new User to the Firebase Realtime Database
      * */
-    private int addUser(String name, String studentId, String major) {
-        //getting a unique id using push().getKey() method
-        //it will create a unique id and we will use it as the Primary Key for our User
-        DatabaseReference databaseUsers = FirebaseDatabase.getInstance().getReference("/Users_list");
-        String id = databaseUsers.push().getKey();
+    private void addUser(String email, String password, String name, String major) {
+        User user = new User(email, password, name, major);
+        String id = user.formatEmail();
 
-        //creating an User Object
-        User user = new User(name, studentId, major);
+        databaseRef.child(id).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                emailInputField.setText("");
+                passwordInputField.setText("");
+                nameInputField.setText("");
+                majorSpinner.setSelection(0);
+                textView.setText("User added successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                emailInputField.setText("");
+                passwordInputField.setText("");
+                nameInputField.setText("");
+                majorSpinner.setSelection(0);
+                textView.setText("Writing to database failed");
+            }
+        });
 
-        databaseUsers.child(id).setValue(user);
-//        databaseUsers.setValue(user2);
-        return 0;
     }
-
-    /*
-     * This method is removing a User from the Firebase Realtime Database
-     */
-    private int deleteUser(String id) {
-        //getting the specified User reference
-        //TODO I'm not sure what "users" references
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference().child(id);
-
-        //removing User
-        dR.removeValue();
-
-        //getting the tracks reference for the specified User
-        DatabaseReference drTracks = FirebaseDatabase.getInstance().getReference().child(id);
-
-        //removing all tracks
-        drTracks.removeValue();
-
-        return 0;
-    }
-
-
-
-
-
-
-
-
-
-
-
-    
-
-//        listViewUsers.setOnItemClickListener(new AdapterView.OnItemClickListener()) {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                //getting the selected user
-//                //User user = users.get(i);
-//
-//                //creating an intent
-//                Intent intent = new Intent(getApplicationContext(), UserActivity.class);
-//
-//                //putting User name and id to intent
-//                intent.putExtra(first_name, firstNameInputField.getText().toString());
-//                intent.putExtra(last_name, lastNameInputField.getText().toString());
-//                intent.putExtra(major, majorSpinner.getSelectedItem().toString());
-//                //starting the activity with intent
-//                startActivity(intent);
-//            }
-//        });
-
-//        listViewUsers.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                User user = users.get(i);
-//                showUpdateDeleteDialog(user.getUserId(), user.getUserName());
-//                return true;
-//            }
-//        });
-
-//    private void showUpdateDeleteDialog(final String userId, String userName) {
-//
-//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-//        LayoutInflater inflater = getLayoutInflater();
-//        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
-//        dialogBuilder.setView(dialogView);
-//
-//
-//
-//        dialogBuilder.setTitle(userName);
-//        final AlertDialog b = dialogBuilder.create();
-//        b.show();
-//
-//    }
-
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        //attaching value event listener
-//        databaseArtists.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                //clearing the previous User list
-//                users.clear();
-//
-//                //iterating through all the nodes
-//                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-//                    //getting User
-//                    User user = postSnapshot.getValue(user.class);
-//                    //adding User to the list
-//                    users.add(user);
-//                }
-//
-//                //creating adapter
-//                UserList userAdapter = new UserList(MainActivity.this, users);
-//                //attaching adapter to the listview
-//                listViewUsers.setAdapter(userAdapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
 }

@@ -8,27 +8,55 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/nameField"
+        android:id="@+id/email_input_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Name" />
+        android:backgroundTint="@android:color/black"
+        android:inputType="textWebEmailAddress"
+        android:hint="Student Email"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
 
     <EditText
-        android:id="@+id/idField"
+        android:id="@+id/password_input_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:backgroundTint="@android:color/black"
+        android:inputType="textPassword"
+        android:hint="WUChat Password"
+        android:textColor="@android:color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <EditText
+        android:id="@+id/name_input_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/black"
         android:inputType="textPersonName"
-        android:hint="Student ID" />
+        android:hint="Name"
+        android:textColor="@android:color/black"
+        android:textColorHighlight="#63FEC745"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"/>
 
     <Spinner
-        android:id="@+id/majorSpinner"
+        android:id="@+id/field_select_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/widener_major_list"
-        android:spinnerMode="dropdown" />
+        android:backgroundTint="@android:color/black"
+        android:entries="@array/widener_study_fields"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/addButton"
@@ -50,5 +78,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete User From Database" />
+
+    <Button
+        android:id="@+id/retrieveUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Display current users in the database" />
+    
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:id="@+id/user_display_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Users will be added to this layout -->
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
