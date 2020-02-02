@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference databaseRef;
 
+    private ArrayList<User> usersList;
+
     private EditText emailInputField;
     private EditText passwordInputField;
     private EditText nameInputField;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addButton;
     private Button removeButton;
-    private Button retrieveUsersButton;
     private TextView textView;
 
     private LinearLayout userDisplayLayout;
@@ -53,13 +54,14 @@ public class MainActivity extends AppCompatActivity {
 
         databaseRef = FirebaseDatabase.getInstance().getReference("/users/");
 
+        usersList = new ArrayList<>();
+
         emailInputField = findViewById(R.id.email_input_field);
         passwordInputField = findViewById(R.id.password_input_field);
         nameInputField = findViewById(R.id.name_input_field);
         majorSpinner = findViewById(R.id.field_select_spinner);
         addButton = findViewById(R.id.addButton);
         removeButton = findViewById(R.id.deleteButton);
-        retrieveUsersButton = findViewById(R.id.retrieveUsers);
         textView = findViewById(R.id.textView);
         userDisplayLayout = findViewById(R.id.user_display_layout);
 
@@ -78,17 +80,29 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(User user : usersList)
+                {
+                    databaseRef.child(user.id).removeValue();
+                }
+            }
+        });
+
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userDisplayLayout.removeAllViews();
+                usersList = new ArrayList<>();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren())
                 {
-                    User post = postSnapshot.getValue(User.class);
-                    TextView userDataView = new TextView(userDisplayLayout.getContext());
-                    userDataView.setText(post.email + " || " + post.password + " || " + post.name + " || " + post.major);
-                    userDisplayLayout.addView(userDataView);
+                    User user = postSnapshot.getValue(User.class);
+                    usersList.add(user);
                 }
+                TextView userDataView = new TextView(userDisplayLayout.getContext());
+                userDataView.setText("User Count: " + usersList.size());
+                userDisplayLayout.addView(userDataView);
             }
 
             @Override
@@ -103,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
      * This method is saving a new User to the Firebase Realtime Database
      * */
     private void addUser(String email, String password, String name, String major) {
-        User user = new User(email, password, name, major);
-        String id = user.formatEmail();
+        String id = databaseRef.push().getKey();
+        User user = new User(id, email, password, name, major);
 
         databaseRef.child(id).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

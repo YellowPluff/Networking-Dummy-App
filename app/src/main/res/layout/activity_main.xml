@@ -79,12 +79,6 @@
         android:layout_height="wrap_content"
         android:text="Delete User From Database" />
 
-    <Button
-        android:id="@+id/retrieveUsers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Display current users in the database" />
-    
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
